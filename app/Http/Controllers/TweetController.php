@@ -123,4 +123,17 @@ class TweetController extends Controller
       ->get();
     return view('tweet.index', compact('tweets'));
   }
+
+  public function timeline()
+  {
+    $tweets = Tweet::query()
+      ->where('user_id', Auth::id())
+      ->orWhereIn('user_id', User::find(Auth::id())->followings->pluck('id')->all())
+      // ->find(Auth::user()->id)
+      // ->userTweets()
+      ->orderBy('updated_at', 'desc')
+      ->get();
+    // ddd($tweets->all());
+    return view('tweet.index', compact('tweets'));
+  }
 }
