@@ -71,7 +71,8 @@ class TweetController extends Controller
    */
   public function edit($id)
   {
-    //
+    $tweet = Tweet::find($id);
+    return view('tweet.edit', compact('tweet'));
   }
 
   /**
@@ -83,7 +84,18 @@ class TweetController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    $validator = Validator::make($request->all(), [
+      'tweet' => 'required | max:191',
+      'description' => 'required',
+    ]);
+    if ($validator->fails()) {
+      return redirect()
+        ->route('tweet.edit', $id)
+        ->withInput()
+        ->withErrors($validator);
+    }
+    $result = Tweet::find($id)->update($request->all());
+    return redirect()->route('tweet.index');
   }
 
   /**
@@ -94,6 +106,7 @@ class TweetController extends Controller
    */
   public function destroy($id)
   {
-    //
+    $result = Tweet::find($id)->delete();
+    return redirect()->route('tweet.index');
   }
 }
