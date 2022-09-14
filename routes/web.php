@@ -14,7 +14,9 @@ use App\Http\Controllers\TweetController;
 |
 */
 
-Route::resource('tweet', TweetController::class);
+Route::group(['middleware' => 'auth'], function () {
+  Route::resource('tweet', TweetController::class);
+});
 
 Route::get('/', function () {
   return view('welcome');
