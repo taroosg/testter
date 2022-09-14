@@ -52,13 +52,13 @@ class User extends Authenticatable
     return $this->belongsToMany(Tweet::class)->withTimestamps();
   }
 
-  public function following()
+  public function followings()
   {
-    return $this->hasManyThrough(User::class, Follow::class, 'user_id', 'id', 'id', 'following_id');
+    return $this->belongsToMany(self::class, "follows", "user_id", "following_id")->withTimestamps();
   }
 
   public function followers()
   {
-    return $this->hasManyThrough(User::class, Follow::class, 'following_id', 'id', 'id', 'user_id');
+    return $this->belongsToMany(self::class, "follows", "following_id", "user_id")->withTimestamps();
   }
 }

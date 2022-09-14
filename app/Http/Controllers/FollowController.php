@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Follow;
 use App\Models\User;
 use Auth;
 
@@ -37,10 +36,7 @@ class FollowController extends Controller
    */
   public function store(User $user)
   {
-    $result =     Follow::create([
-      'user_id' => Auth::id(),
-      'following_id' => $user->id
-    ]);
+    $user->followers()->attach(Auth::id());
     return redirect()->route('tweet.index');
   }
 
@@ -54,7 +50,7 @@ class FollowController extends Controller
   {
     $user = User::find($id);
     $followers = $user->followers;
-    $followings  = $user->following;
+    $followings  = $user->followings;
 
     return view('user.show', compact('user', 'followers', 'followings'));
   }
@@ -90,11 +86,7 @@ class FollowController extends Controller
    */
   public function destroy(User $user)
   {
-    $result = Follow::query()
-      ->where('user_id', Auth::id())
-      ->where('following_id', $user->id)
-      ->delete();
-
+    $user->followers()->detach(Auth::id());
     return redirect()->route('tweet.index');
   }
 }
