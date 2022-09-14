@@ -28,6 +28,13 @@
             {{ __('Create') }}
           </x-nav-link>
         </div>
+        <!-- 🔽 マイページへのリンクを追加 -->
+        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+          <x-nav-link :href="route('tweet.mypage')" :active="request()->routeIs('tweet.mypage')">
+            {{ __('Mypage') }}
+          </x-nav-link>
+        </div>
+
       </div>
 
       <!-- Settings Dropdown -->
@@ -90,6 +97,13 @@
         {{ __('Create') }}
       </x-responsive-nav-link>
     </div>
+    <!-- 🔽 マイページへのリンクを追加 -->
+    <div class="pt-2 pb-3 space-y-1">
+      <x-responsive-nav-link :href="route('tweet.mypage')" :active="request()->routeIs('tweet.mypage')">
+        {{ __('Mypage') }}
+      </x-responsive-nav-link>
+    </div>
+
     <!-- Responsive Settings Options -->
     <div class="pt-4 pb-1 border-t border-gray-200">
       <div class="px-4">
