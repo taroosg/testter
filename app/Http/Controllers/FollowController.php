@@ -36,7 +36,8 @@ class FollowController extends Controller
    */
   public function store(User $user)
   {
-    $user->followers()->attach(Auth::id());
+    Auth::user()->followings()->attach($user->id);
+    // $user->followers()->attach(Auth::id());
     return redirect()->route('tweet.index');
   }
 
@@ -86,7 +87,9 @@ class FollowController extends Controller
    */
   public function destroy(User $user)
   {
-    $user->followers()->detach(Auth::id());
+    Auth::user()->followings()->detach($user->id);
+
+    // $user->followers()->detach(Auth::id());
     return redirect()->route('tweet.index');
   }
 }
