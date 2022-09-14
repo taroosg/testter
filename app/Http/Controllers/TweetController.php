@@ -15,7 +15,7 @@ class TweetController extends Controller
    */
   public function index()
   {
-    $tweets = [];
+    $tweets = Tweet::getAllOrderByUpdated_at();
     return view('tweet.index', compact('tweets'));
   }
 
@@ -37,6 +37,18 @@ class TweetController extends Controller
    */
   public function store(Request $request)
   {
+    $validator = Validator::make($request->all(), [
+      'tweet' => 'required | max:191',
+      'description' => 'required',
+    ]);
+    if ($validator->fails()) {
+      return redirect()
+        ->route('tweet.create')
+        ->withInput()
+        ->withErrors($validator);
+    }
+    $result = Tweet::create($request->all());
+    return redirect()->route('tweet.index');
   }
 
   /**
