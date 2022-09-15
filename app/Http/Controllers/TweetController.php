@@ -126,9 +126,10 @@ class TweetController extends Controller
 
   public function timeline()
   {
+    $followings = User::find(Auth::id())->followings->pluck('id')->all();
     $tweets = Tweet::query()
       ->where('user_id', Auth::id())
-      ->orWhereIn('user_id', User::find(Auth::id())->followings->pluck('id')->all())
+      ->orWhereIn('user_id', $followings)
       // ->find(Auth::user()->id)
       // ->userTweets()
       ->orderBy('updated_at', 'desc')
