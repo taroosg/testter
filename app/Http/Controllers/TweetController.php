@@ -130,11 +130,8 @@ class TweetController extends Controller
     $tweets = Tweet::query()
       ->where('user_id', Auth::id())
       ->orWhereIn('user_id', $followings)
-      // ->find(Auth::user()->id)
-      // ->userTweets()
       ->orderBy('updated_at', 'desc')
       ->get();
-    // ddd($tweets->all());
     return view('tweet.index', compact('tweets'));
   }
 }
