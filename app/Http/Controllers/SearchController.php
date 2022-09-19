@@ -4,18 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tweet;
-use Auth;
+use App\Models\User;
 
-class FavoriteController extends Controller
+class SearchController extends Controller
 {
   /**
    * Display a listing of the resource.
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
-    //
+    // 🔽 空白削除
+    $keyword = trim($request->keyword);
+    // 🔽 ヒットしたユーザの id（配列）
+    $users  = User::where('name', 'like', "%{$keyword}%")->pluck('id')->all();
+    $tweets = Tweet::query()
+      ->where('tweet', 'like', "%{$keyword}%")
+      ->orWhere('description', 'like', "%{$keyword}%")
+      ->orWhereIn('user_id', $users)
+      ->get();
+    return view('tweet.index', compact('tweets'));
   }
 
   /**
@@ -25,7 +34,7 @@ class FavoriteController extends Controller
    */
   public function create()
   {
-    //
+    return view('search.input');
   }
 
   /**
@@ -34,10 +43,9 @@ class FavoriteController extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store(Tweet $tweet)
+  public function store(Request $request)
   {
-    $tweet->users()->attach(Auth::id());
-    return redirect()->back();
+    //
   }
 
   /**
@@ -80,9 +88,8 @@ class FavoriteController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Tweet $tweet)
+  public function destroy($id)
   {
-    $tweet->users()->detach(Auth::id());
-    return redirect()->back();
+    //
   }
 }
