@@ -120,6 +120,7 @@ class TweetController extends Controller
       ->find(Auth::user()->id)
       ->userTweets()
       ->orderBy('created_at', 'desc')
+      ->with('user')
       ->get();
     return view('tweet.index', compact('tweets'));
   }
@@ -131,6 +132,7 @@ class TweetController extends Controller
       ->where('user_id', Auth::id())
       ->orWhereIn('user_id', $followings)
       ->orderBy('updated_at', 'desc')
+      ->with('user')
       ->get();
     return view('tweet.index', compact('tweets'));
   }
